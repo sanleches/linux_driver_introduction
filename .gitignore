@@ -10,10 +10,12 @@
 /dataSources.local.xml
 #
 *.cmd
+.tmp_*/
 *.mod*
 *.mod
 *.symvers
 *.ko
 *.o
 *.order
+compile_commands.json
 *.xml

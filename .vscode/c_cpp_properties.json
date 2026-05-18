@@ -1,17 +1,28 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/usr/src/linux-headers-7.0.0-15-generic/include"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "Linux",
+      "compileCommands": "${workspaceFolder}/hello_kernel_03/compile_commands.json",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/include",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/include/uapi",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/include/generated",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/include/generated/uapi",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/uapi",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/generated",
+        "/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/generated/uapi"
+      ],
+      "defines": [
+        "__KERNEL__",
+        "MODULE"
+      ],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu17",
+      "cppStandard": "gnu++17",
+      "intelliSenseMode": "linux-gcc-x64"
+    }
+  ],
+  "version": 4
 }
