@@ -1,0 +1,16 @@
+CompileFlags:
+  Add:
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/include
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/generated
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/include/generated
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/include/uapi
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/uapi
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/arch/x86/include/generated/uapi
+    - -I/lib/modules/7.0.8-200.fc44.x86_64/build/include/generated/uapi
+    - -include
+    - /lib/modules/7.0.8-200.fc44.x86_64/build/include/generated/autoconf.h
+    - -D__KERNEL__
+    - -DMODULE
+    - -DKBUILD_MODNAME=\"hello_cdev\"
+    - -DKBUILD_BASENAME=\"hello_cdev\"
