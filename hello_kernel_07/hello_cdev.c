@@ -1,8 +1,26 @@
+/*
+ * =============================================================================
+ * hello_kernel_07 - Character Device Open/Release Callbacks
+ * =============================================================================
+ *
+ * Registers a character device and prints metadata from each open call. The
+ * companion test program opens the device with different flag combinations so
+ * the driver can show how those flags arrive in struct file.
+ */
+
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/fs.h>
 
+// -----------------------------------------------------------------------------
+// Internal State
+// -----------------------------------------------------------------------------
+
 static int major;
+
+// -----------------------------------------------------------------------------
+// Character Device Operations
+// -----------------------------------------------------------------------------
 
 static int my_open (struct inode *inode, struct file *filp) {
 
@@ -27,8 +45,13 @@ static struct file_operations fops = {
     .release = my_release
 };
 
+// -----------------------------------------------------------------------------
+// Module Lifecycle
+// -----------------------------------------------------------------------------
+
 static int __init my_Init(void){
 
+    // Passing major 0 asks the kernel to allocate an available major number.
     major = register_chrdev(0, "hello_cdev", &fops);
     if(major < 0) { //if its major than 0 an error occurred while registering the device
         pr_err("hello_cdev - Error registering chrdev\n");
@@ -43,6 +66,10 @@ static void __exit my_Exit(void){
 
     unregister_chrdev(major, "hello_cdev");
 }
+
+// -----------------------------------------------------------------------------
+// Kernel Module Declaration
+// -----------------------------------------------------------------------------
 
 module_init(my_Init);
 module_exit(my_Exit);

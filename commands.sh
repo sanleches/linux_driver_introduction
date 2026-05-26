@@ -1,24 +1,47 @@
-insmod module_name.ko #Insert module into the kernel
-lsmod #List modules
-lsmod | grep module_name #Check if module is loaded
-rmmod module_name #Remove module
-dmesg #Check kernel messages for module loading/unloading
-modinfo module_name.ko #Get information about the module
-dmesg -w #Watch kernel messages in real-time
-rmmod module_name #Force remove module (-f) if it is in use
-modprobe module_name #Load module and its dependencies // must be in /lib/modules/$(uname -r)/kernel/
-modprobe -r module_name #Remove module and its dependencies
+# Linux Driver Introduction - Command Reference
+#
+# This file is a copy/paste command sheet, not a script intended to be run from
+# top to bottom. Replace placeholders such as `module_name`, `hidraw14`, and the
+# major device number with values from the lesson you are testing.
 
+# -----------------------------------------------------------------------------
+# Kernel Module Lifecycle
+# -----------------------------------------------------------------------------
 
+insmod module_name.ko          # Insert a module directly into the kernel
+lsmod                         # List loaded kernel modules
+lsmod | grep module_name      # Check whether a module is loaded
+rmmod module_name             # Remove a loaded module
+modinfo module_name.ko        # Show module metadata
 
-udevadm info -q property hidraw14 #Get information about a specific device (replace hidraw14 with your device) (can match vendor and product ID )
-ls -lh /dev/hidraw* #List hidraw devices with details
-hexdump -C /dev/hidraw14 #Dump raw data from the device (replace hidraw14 with your device)
-#udevadm monitor --udev #Monitor udev events in real-time 
+# modprobe resolves dependencies, but the module must be installed under
+# /lib/modules/$(uname -r)/ before the command can find it.
+modprobe module_name          # Load a module and its dependencies
+modprobe -r module_name       # Remove a module and its dependencies
 
- sudo mknod hello0 c 236 0 # create a new nod file that links to a major device Number
+# -----------------------------------------------------------------------------
+# Kernel Log Inspection
+# -----------------------------------------------------------------------------
 
+dmesg                         # Print current kernel messages
+dmesg -w                      # Watch kernel messages in real time
+dmesg -W                      # Wait for and print new messages
+dmesg -WT                     # Print human-readable timestamps
+dmesg -l 1-7                  # Filter by kernel log levels
 
-dmesg -W
-dmesg -WT #formatted
-dmesg -l 1-7 #what level or message want to see
+# -----------------------------------------------------------------------------
+# Character Device Nodes
+# -----------------------------------------------------------------------------
+
+# Create a device node for a character device. Use the major number printed by
+# the module at load time and the minor expected by the lesson.
+sudo mknod hello0 c 236 0
+
+# -----------------------------------------------------------------------------
+# HID and udev Inspection
+# -----------------------------------------------------------------------------
+
+udevadm info -q property hidraw14  # Inspect one hidraw device
+ls -lh /dev/hidraw*               # List hidraw devices
+hexdump -C /dev/hidraw14          # Dump raw bytes from one hidraw device
+# udevadm monitor --udev          # Watch udev events in real time

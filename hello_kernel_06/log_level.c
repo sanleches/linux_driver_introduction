@@ -1,6 +1,19 @@
+/*
+ * =============================================================================
+ * hello_kernel_06 - Kernel Log Levels
+ * =============================================================================
+ *
+ * Demonstrates printk severity prefixes and the equivalent pr_* convenience
+ * helpers. View the messages with dmesg after loading and unloading the module.
+ */
+
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/fs.h>
+
+// -----------------------------------------------------------------------------
+// Module Lifecycle
+// -----------------------------------------------------------------------------
 
 static int __init my_Init(void){
 
@@ -18,6 +31,10 @@ static void __exit my_Exit(void){
     pr_err("log_level - Error\n");
     pr_info("log_level - the last info...");
 }
+
+// -----------------------------------------------------------------------------
+// Kernel Module Declaration
+// -----------------------------------------------------------------------------
 
 module_init(my_Init);
 module_exit(my_Exit);

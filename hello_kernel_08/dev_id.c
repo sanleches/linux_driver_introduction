@@ -1,6 +1,12 @@
-//
-// Created by santiago on 5/18/26.
-//
+/*
+ * =============================================================================
+ * hello_kernel_08 - USB Device Identity Lookup
+ * =============================================================================
+ *
+ * User-space libudev helper that scans USB devices and prints details for the
+ * custom hardware identity used by the USB HID firmware experiments.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +18,10 @@
 #define PRODUCT_ID  "0001"
 #define REVISION_ID "0100"
 
+// -----------------------------------------------------------------------------
+// Device Lookup
+// -----------------------------------------------------------------------------
+
 int main() {
     struct udev *udev = udev_new();
     if (!udev) {
@@ -19,27 +29,28 @@ int main() {
         return 1;
     }
 
-    // Create a scan enumerator
+    // Create a scan enumerator for the Linux device model.
     struct udev_enumerate *enumerate = udev_enumerate_new(udev);
-    // Filter specifically for the USB subsystem to speed up the scan
+
+    // Filter specifically for the USB subsystem to keep the scan focused.
     udev_enumerate_add_match_subsystem(enumerate, "usb");
     udev_enumerate_scan_devices(enumerate);
 
     struct udev_list_entry *devices = udev_enumerate_get_list_entry(enumerate);
     struct udev_list_entry *entry;
 
-    // Iterate through all matched USB devices
+    // Iterate through all matched USB devices.
     udev_list_entry_foreach(entry, devices){
         const char *path = udev_list_entry_get_name(entry);
         struct udev_device *dev = udev_device_new_from_syspath(udev, path);
 
-        // Get the core USB identification attributes
+        // Get the core USB identification attributes from sysfs.
         const char *idVendor  = udev_device_get_sysattr_value(dev, "idVendor");
         const char *idProduct = udev_device_get_sysattr_value(dev, "idProduct");
         const char *bcdDevice = udev_device_get_sysattr_value(dev, "bcdDevice"); // Revision
         const char *idUsbModel = udev_device_get_property_value(dev, "ID_USB_MODEL");
 
-        // Check if this matches your custom hardware (6666:0001 rev 0100)
+        // Check if this matches the custom hardware (6666:0001 rev 0100).
         if (idVendor && strcmp(idVendor, VENDOR_ID) == 0 &&
             idProduct && strcmp(idProduct, PRODUCT_ID) == 0 &&
             bcdDevice && strcmp(bcdDevice, REVISION_ID) == 0) {
@@ -60,7 +71,7 @@ int main() {
                 printf("  Minor:    (none)\n");
             }
 
-            // Driver module info
+            // Driver module info.
             const char *driver = udev_device_get_driver(dev);
             printf("  Driver Bound: %s\n", driver ? driver : "(none - unbound)");
 
